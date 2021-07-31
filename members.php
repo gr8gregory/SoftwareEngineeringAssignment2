@@ -1,4 +1,5 @@
 <?php 
+    require_once __DIR__ . "/Database.php";
     session_start();
 ?>
 
@@ -35,4 +36,64 @@
         //echo '<script>alert("You are not logged in.")</script>';
         //header("location: login.php");
     }
+
+    $database = new Database('127.0.0.1', 'choeksema', 'eMach1ne', 'elevator');
+
+    $columns = array('requestedFloor', 'nodeID');
+    $conditions = array('status'=>2, 'currentFloor'=>0, 'otherInfo'=>'"elevatorCar"');
+    try
+    {
+        $success = $database->Select('elevatorNetwork', $columns, $conditions, 'or');
+    }
+    catch (Exception $e)
+    {
+        echo "<p>Exception thrown while accessing database.</p>";
+        echo $e->getMessage();
+    }
+    echo '<p>Obtained ' . count($success) . ' result(s)</p>';
+    foreach($success as $x)
+        echo "<p>ID: " . $x['nodeID'] . ", floor " . $x['requestedFloor'] . "</p>";
+
+
+    $columns = array('date'=>'CURRENT_DATE', 'time'=>'CURRENT_TIME', 'status'=>0, 'currentFloor'=>0, 'requestedFloor'=>13 /*'otherInfo'=>'elevatorCar'*/);
+    try
+    {
+        $numRows = 0;
+        $numRows = $database->Insert('elevatorNetwork', $columns);
+    }
+    catch (Exception $e)
+    {
+        echo "<p>Exception thrown while accessing database.</p>";
+        echo $e->getMessage();
+    }
+    echo '<p>Inserted ' . $numRows . ' row(s) into the database</p>';
+
+
+    $conditions = array('requestedFloor'=>13);
+    try
+    {
+        $numRows = 0;
+        $numRows = $database->Delete('elevatorNetwork', $conditions, 'and');
+    }
+    catch (Exception $e)
+    {
+        echo "<p>Exception thrown while accessing database.</p>";
+        echo $e->getMessage();
+    }
+    echo '<p>Deleted ' . $numRows . ' row(s) from the database</p>';  
+
+
+    $columns = array('requestedFloor'=>13);
+    $conditions = array('nodeID'=>91, 'currentFloor'=>0);
+    try
+    {
+        $numRows = 0;
+        $numRows = $database->Update('elevatorNetwork', $columns, $conditions, 'and');
+    }
+    catch (Exception $e)
+    {
+        echo "<p>Exception thrown while accessing database.</p>";
+        echo $e->getMessage();
+    }
+    echo '<p>Updated ' . $numRows . ' row(s) in the database</p>';    
 ?>

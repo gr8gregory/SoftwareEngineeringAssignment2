@@ -1,5 +1,5 @@
 <?php
-include './node.php';
+require_once __DIR__ . "/Node.php";
 class elevatorCar extends node{
     public function getFloor():int{
         

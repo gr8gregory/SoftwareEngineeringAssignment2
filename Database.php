@@ -56,11 +56,11 @@ class Database
 			}
 			else
 			{
-				foreach($columns as $col)
+				foreach($columns as $key=>$col)
 				{
 					$this->query_ .= $col;
 
-					if ($col != $columns[$lastCol])
+					if ($key != $lastCol)
 						$this->query_ .= ',';
 				}
 			}
@@ -328,6 +328,13 @@ class Database
 	}
 
 
+	/*
+	 * Method to execute a read operation (eg: select) on a mysql database
+	 *
+	 * Input: N/A
+	 *
+	 * Returns array: the contents of the read rows
+	 */
 	private function executeRead(): array
 	{
 		try
@@ -367,6 +374,13 @@ class Database
 	}
 
 
+	/*
+	 * Method to execute a write operation (eg: update) on a mysql database
+	 *
+	 * Input: N/A
+	 *
+	 * Returns int: the number of rows affected
+	 */
 	private function executeWrite(): int
 	{
 		try
